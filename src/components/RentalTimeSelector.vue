@@ -260,7 +260,7 @@ function toggleCityDropdown() {
 }
 
 function selectCity(city) {
-  emit('update:city', city.id)
+  emit('update:city', String(city.id))
   showCityDropdown.value = false
 }
 

@@ -9,9 +9,9 @@
               <h2 class="section-title">{{ $t('banner.title') }}</h2>
               <div class="city-selector">
                 <label>选择城市:</label>
-                <select :value="selectedCityId" @change="handleCityChange($event.target.value || '')">
+                <select :value="selectedCityId" @change="handleCityChange($event.target.value)">
                   <option value="">全国</option>
-                  <option v-for="city in cities" :key="city.id" :value="city.id">
+                  <option v-for="city in cities" :key="city.id" :value="String(city.id)">
                     {{ city.name }}
                   </option>
                 </select>
@@ -71,7 +71,7 @@ function handleNavigate(page) {
 }
 
 function handleCityChange(cityId) {
-  selectedCityId.value = cityId
+  selectedCityId.value = cityId ? String(cityId) : ''
   fetchBanners()
 }
 
