@@ -9,7 +9,7 @@
               <h2 class="section-title">{{ $t('banner.title') }}</h2>
               <div class="city-selector">
                 <label>选择城市:</label>
-                <select :value="selectedCityId" @change="handleCityChange($event.target.value)">
+                <select :value="selectedCityId" @change="handleCityChange($event.target.value || '')">
                   <option value="">全国</option>
                   <option v-for="city in cities" :key="city.id" :value="String(city.id)">
                     {{ city.name }}
@@ -17,10 +17,10 @@
                 </select>
               </div>
             </div>
-            <BannerCarousel :key="selectedCityId || 'all'" :banners="banners" />
+            <BannerCarousel :banners="banners" />
           </section>
 
-          <HotRecommendations :key="'hot-' + (selectedCityId || 'all')" :city-id="selectedCityId" :cities="cities" />
+          <HotRecommendations :city-id="selectedCityId" :cities="cities" />
 
           <div class="hero-section">
             <h1>{{ $t('home.title') }}</h1>
