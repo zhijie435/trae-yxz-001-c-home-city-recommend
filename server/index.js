@@ -8,11 +8,11 @@ app.use(cors())
 app.use(express.json())
 
 const cities = [
-  { id: 1, name: '北京', nameEn: 'Beijing', country: '中国', score: 95 },
-  { id: 2, name: '上海', nameEn: 'Shanghai', country: '中国', score: 94 },
-  { id: 3, name: '深圳', nameEn: 'Shenzhen', country: '中国', score: 92 },
-  { id: 4, name: '杭州', nameEn: 'Hangzhou', country: '中国', score: 90 },
-  { id: 5, name: '成都', nameEn: 'Chengdu', country: '中国', score: 88 }
+  { id: 1, name: '北京', nameEn: 'Beijing', country: '中国', score: 95, lat: 39.9042, lng: 116.4074 },
+  { id: 2, name: '上海', nameEn: 'Shanghai', country: '中国', score: 94, lat: 31.2304, lng: 121.4737 },
+  { id: 3, name: '深圳', nameEn: 'Shenzhen', country: '中国', score: 92, lat: 22.5431, lng: 114.0579 },
+  { id: 4, name: '杭州', nameEn: 'Hangzhou', country: '中国', score: 90, lat: 30.2741, lng: 120.1551 },
+  { id: 5, name: '成都', nameEn: 'Chengdu', country: '中国', score: 88, lat: 30.5728, lng: 104.0668 }
 ]
 
 let banners = [
@@ -74,6 +74,25 @@ let bannerIdCounter = 5
 
 app.get('/api/cities', (req, res) => {
   res.json({ success: true, data: cities })
+})
+
+app.get('/api/city/detect', (req, res) => {
+  const { lat, lng } = req.query
+  if (!lat || !lng) {
+    return res.json({ success: true, data: cities.find(c => c.id === 1) })
+  }
+  const userLat = parseFloat(lat)
+  const userLng = parseFloat(lng)
+  let nearest = cities[0]
+  let minDist = Infinity
+  for (const city of cities) {
+    const d = Math.sqrt(Math.pow(city.lat - userLat, 2) + Math.pow(city.lng - userLng, 2))
+    if (d < minDist) {
+      minDist = d
+      nearest = city
+    }
+  }
+  res.json({ success: true, data: nearest })
 })
 
 app.get('/api/banners', (req, res) => {

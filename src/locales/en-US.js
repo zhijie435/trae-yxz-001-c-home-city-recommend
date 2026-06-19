@@ -103,5 +103,13 @@ export default {
     'zh-CN': '简体中文',
     'zh-TW': '繁體中文',
     'en-US': 'English'
+  },
+  rental: {
+    selectCity: 'Select City',
+    selectDate: 'Select Rental Period',
+    selectDateHint: 'Please select start and end dates',
+    days: ' days',
+    reset: 'Reset',
+    confirm: 'Confirm'
   }
 }

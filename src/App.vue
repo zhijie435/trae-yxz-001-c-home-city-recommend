@@ -23,6 +23,7 @@
           <div class="hero-section">
             <h1>{{ $t('home.title') }}</h1>
             <p class="hero-desc">{{ $t('home.description') }}</p>
+            <RentalTimeSelector />
           </div>
         </div>
       </template>
@@ -44,6 +45,7 @@ import AppHeader from './components/AppHeader.vue'
 import BannerCarousel from './components/BannerCarousel.vue'
 import BannerAdmin from './components/BannerAdmin.vue'
 import BannerApply from './components/BannerApply.vue'
+import RentalTimeSelector from './components/RentalTimeSelector.vue'
 
 const currentPage = ref('home')
 const banners = ref([])
@@ -167,6 +169,9 @@ onMounted(() => {
 .hero-section {
   text-align: center;
   padding: 60px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .hero-section h1 {
@@ -181,7 +186,7 @@ onMounted(() => {
   opacity: 0.9;
   line-height: 1.8;
   max-width: 700px;
-  margin: 0 auto;
+  margin: 0 auto 32px;
 }
 
 @media (max-width: 640px) {

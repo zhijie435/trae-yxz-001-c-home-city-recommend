@@ -103,5 +103,13 @@ export default {
     'zh-CN': '简体中文',
     'zh-TW': '繁體中文',
     'en-US': 'English'
+  },
+  rental: {
+    selectCity: '选择城市',
+    selectDate: '选择租赁时间',
+    selectDateHint: '请选择起止日期',
+    days: '天',
+    reset: '重置',
+    confirm: '确认'
   }
 }
