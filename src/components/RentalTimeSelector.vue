@@ -21,15 +21,15 @@
           </div>
           <ul class="city-list">
             <li
-              v-for="city in cities"
+              v-for="city in store.city.list"
               :key="city.id"
               class="city-item"
-              :class="{ active: String(selectedCityId) === String(city.id) }"
+              :class="{ active: String(store.city.selectedId) === String(city.id) }"
               @click="selectCity(city)"
             >
               <span class="city-item-name">{{ city.name }}</span>
               <span class="city-item-en">{{ city.nameEn }}</span>
-              <svg v-if="String(selectedCityId) === String(city.id)" class="check-icon" viewBox="0 0 24 24" fill="none">
+              <svg v-if="String(store.city.selectedId) === String(city.id)" class="check-icon" viewBox="0 0 24 24" fill="none">
                 <path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </li>
@@ -103,23 +103,10 @@
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { store, getters, actions } from '../store'
 
 const { t } = useI18n()
 
-const props = defineProps({
-  cities: {
-    type: Array,
-    default: () => []
-  },
-  selectedCityId: {
-    type: [Number, String],
-    default: ''
-  }
-})
-
-const emit = defineEmits(['update:city'])
-
-const isDetecting = ref(true)
 const showCityDropdown = ref(false)
 const showDatePicker = ref(false)
 const startDate = ref(null)
@@ -130,9 +117,11 @@ const pickerMonth = ref(new Date().getMonth())
 
 const weekdays = ['日', '一', '二', '三', '四', '五', '六']
 
+const isDetecting = computed(() => store.city.detecting)
+
 const currentCityName = computed(() => {
-  if (!props.selectedCityId) return '全国'
-  const city = props.cities.find(c => c.id === Number(props.selectedCityId) || c.id === props.selectedCityId)
+  if (!getters.isCitySelected.value) return '全国'
+  const city = getters.currentCity.value
   return city ? city.name : '全国'
 })
 
@@ -260,7 +249,7 @@ function toggleCityDropdown() {
 }
 
 function selectCity(city) {
-  emit('update:city', String(city.id))
+  actions.setSelectedCity(String(city.id))
   showCityDropdown.value = false
 }
 
@@ -272,16 +261,6 @@ function handleClickOutside(e) {
     showDatePicker.value = false
   }
 }
-
-watch(
-  () => props.cities,
-  (newCities) => {
-    if (newCities && newCities.length > 0) {
-      isDetecting.value = false
-    }
-  },
-  { immediate: true }
-)
 
 onMounted(() => {
   document.addEventListener('click', handleClickOutside)

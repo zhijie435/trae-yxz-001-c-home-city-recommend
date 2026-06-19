@@ -264,7 +264,7 @@ app.put('/api/banners/:id/reject', (req, res) => {
 })
 
 app.get('/api/hot-products', (req, res) => {
-  const { cityId, limit } = req.query
+  const { cityId, limit, sortBy = 'sort', sortOrder = 'asc' } = req.query
   let result = [...hotProducts]
 
   if (cityId) {
@@ -273,10 +273,22 @@ app.get('/api/hot-products', (req, res) => {
   }
 
   result.sort((a, b) => {
-    if (a.sort !== b.sort) {
-      return a.sort - b.sort
+    let comparison = 0
+    if (sortBy === 'sort') {
+      comparison = a.sort - b.sort
+      if (comparison === 0) {
+        comparison = b.sales - a.sales
+      }
+    } else if (sortBy === 'sales') {
+      comparison = b.sales - a.sales
+    } else if (sortBy === 'price') {
+      comparison = a.price - b.price
+    } else if (sortBy === 'name') {
+      comparison = a.name.localeCompare(b.name, 'zh-CN')
+    } else {
+      comparison = a.sort - b.sort
     }
-    return b.sales - a.sales
+    return sortOrder === 'desc' ? -comparison : comparison
   })
 
   if (limit) {

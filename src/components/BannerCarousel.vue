@@ -12,8 +12,8 @@
         >
           <a
             class="banner-link"
-            :href="banner.linkUrl || 'javascript:void(0)'"
-            :target="banner.linkUrl ? '_blank' : '_self'"
+            href="javascript:void(0)"
+            @click.prevent="handleBannerClick(banner)"
           >
             <img :src="banner.imageUrl" :alt="banner.title" class="banner-image" />
             <div class="banner-overlay">
@@ -71,6 +71,7 @@
 
 <script setup>
 import { ref, onMounted, onBeforeUnmount, watch, defineProps } from 'vue'
+import { navigationService } from '../services/navigation'
 
 const props = defineProps({
   banners: {
@@ -102,6 +103,10 @@ function prevSlide() {
 
 function goToSlide(index) {
   currentIndex.value = index
+}
+
+function handleBannerClick(banner) {
+  navigationService.handleBannerClick(banner)
 }
 
 function startAutoPlay() {

@@ -7,6 +7,7 @@ export default {
     home: 'Home',
     bannerAdmin: 'Banner Admin',
     bannerApply: 'Apply Banner',
+    hotAdmin: 'Sort Products',
     productSort: 'Sort Products'
   },
   home: {
@@ -142,7 +143,11 @@ export default {
     tagHot: 'Hot',
     tagBest: 'Best',
     tagNew: 'New',
-    tagRecommend: 'Pick'
+    tagRecommend: 'Pick',
+    sortDefault: 'Default',
+    sortSales: 'By Sales',
+    sortPrice: 'By Price',
+    sortName: 'By Name'
   },
   productSort: {
     title: 'Product Sort Management',

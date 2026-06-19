@@ -7,6 +7,7 @@ export default {
     home: '首頁',
     bannerAdmin: 'Banner管理',
     bannerApply: 'Banner申請',
+    hotAdmin: '商品排序',
     productSort: '商品排序'
   },
   home: {
@@ -142,6 +143,10 @@ export default {
     tagHot: '熱銷',
     tagBest: '爆款',
     tagNew: '新品',
-    tagRecommend: '推薦'
+    tagRecommend: '推薦',
+    sortDefault: '預設排序',
+    sortSales: '銷量優先',
+    sortPrice: '價格優先',
+    sortName: '名稱排序'
   }
 }

@@ -7,6 +7,7 @@ export default {
     home: '首页',
     bannerAdmin: 'Banner管理',
     bannerApply: 'Banner申请',
+    hotAdmin: '商品排序',
     productSort: '商品排序'
   },
   home: {
@@ -142,7 +143,11 @@ export default {
     tagHot: '热销',
     tagBest: '爆款',
     tagNew: '新品',
-    tagRecommend: '推荐'
+    tagRecommend: '推荐',
+    sortDefault: '默认排序',
+    sortSales: '销量优先',
+    sortPrice: '价格优先',
+    sortName: '名称排序'
   },
   productSort: {
     title: '商品排序管理',

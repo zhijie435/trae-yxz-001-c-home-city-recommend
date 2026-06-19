@@ -1,5 +1,5 @@
 <template>
-  <section class="hot-recommendations-section">
+  <section class="hot-recommendations-section" id="hot-recommendations">
     <div class="section-header">
       <div class="header-left">
         <h2 class="section-title">{{ $t('hotRecommend.title') }}</h2>
@@ -7,18 +7,47 @@
           {{ selectedCityName ? `${selectedCityName}${$t('hotRecommend.subtitleCity')}` : $t('hotRecommend.subtitleAll') }}
         </span>
       </div>
-      <div class="header-badge">
-        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 2.5s4 4 4 8.5a4 4 0 0 1-8 0c0-2 1.5-3.5 1.5-3.5S8 9 8 11a4 4 0 0 0 8 0c0-2-2-4.5-4-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
+      <div class="header-actions">
+        <div class="sort-dropdown" :class="{ active: showSortMenu }">
+          <button class="sort-trigger" @click.stop="toggleSortMenu">
+            <svg class="sort-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3 6h18M6 12h12M10 18h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            <span class="sort-label">{{ currentSortLabel }}</span>
+            <svg class="chevron" :class="{ rotated: showSortMenu }" viewBox="0 0 24 24" fill="none">
+              <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <transition name="dropdown">
+            <ul v-if="showSortMenu" class="sort-menu">
+              <li
+                v-for="option in sortOptions"
+                :key="option.value"
+                class="sort-option"
+                :class="{ active: store.product.sortBy === option.value }"
+                @click.stop="handleSortChange(option.value)"
+              >
+                <span>{{ option.label }}</span>
+                <svg v-if="store.product.sortBy === option.value" class="check-icon" viewBox="0 0 24 24" fill="none">
+                  <path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </li>
+            </ul>
+          </transition>
+        </div>
+        <div class="header-badge">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2.5s4 4 4 8.5a4 4 0 0 1-8 0c0-2 1.5-3.5 1.5-3.5S8 9 8 11a4 4 0 0 0 8 0c0-2-2-4.5-4-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
       </div>
     </div>
 
-    <div v-if="loading" class="loading-container">
+    <div v-if="store.product.loading" class="loading-container">
       <div class="loading-spinner"></div>
     </div>
 
-    <div v-else-if="products.length === 0" class="empty-state">
+    <div v-else-if="store.product.list.length === 0" class="empty-state">
       <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="empty-icon">
         <path d="M20 7h-3V5a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v2H4a1 1 0 0 0-1 1v11a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8a1 1 0 0 0-1-1zM9 5h6v2H9V5z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
       </svg>
@@ -27,7 +56,7 @@
 
     <div v-else class="product-grid">
       <div
-        v-for="(product, index) in products"
+        v-for="(product, index) in store.product.list"
         :key="product.id"
         class="product-card"
         @click="handleProductClick(product)"
@@ -68,28 +97,30 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { useI18n } from 'vue-i18n'
-
-const props = defineProps({
-  cityId: {
-    type: [String, Number],
-    default: ''
-  },
-  cities: {
-    type: Array,
-    default: () => []
-  }
-})
+import { store, getters, actions } from '../store'
+import { navigationService } from '../services/navigation'
 
 const { t, locale } = useI18n()
 
-const products = ref([])
-const loading = ref(false)
+const showSortMenu = ref(false)
+
+const sortOptions = computed(() => [
+  { value: 'sort', label: t('hotRecommend.sortDefault') },
+  { value: 'sales', label: t('hotRecommend.sortSales') },
+  { value: 'price', label: t('hotRecommend.sortPrice') },
+  { value: 'name', label: t('hotRecommend.sortName') }
+])
+
+const currentSortLabel = computed(() => {
+  const option = sortOptions.value.find(o => o.value === store.product.sortBy)
+  return option ? option.label : sortOptions.value[0].label
+})
 
 const selectedCityName = computed(() => {
-  if (!props.cityId) return ''
-  const city = props.cities.find(c => String(c.id) === String(props.cityId))
+  if (!getters.isCitySelected.value) return ''
+  const city = getters.currentCity.value
   if (!city) return ''
   return locale.value === 'en-US' ? city.nameEn : city.name
 })
@@ -112,35 +143,30 @@ function getProductTagLabel(tag) {
   return tagMap[tag] || tag
 }
 
-async function fetchHotProducts() {
-  loading.value = true
-  try {
-    const url = props.cityId
-      ? `/api/hot-products?cityId=${props.cityId}&limit=8`
-      : '/api/hot-products?limit=8'
-    const res = await fetch(url)
-    const data = await res.json()
-    if (data.success) {
-      products.value = data.data
-    }
-  } catch (e) {
-    console.error(e)
-  } finally {
-    loading.value = false
-  }
+function toggleSortMenu() {
+  showSortMenu.value = !showSortMenu.value
+}
+
+function handleSortChange(sortBy) {
+  actions.setProductSort(sortBy, store.product.sortOrder)
+  showSortMenu.value = false
 }
 
 function handleProductClick(product) {
-  console.log('Product clicked:', product)
+  navigationService.handleProductClick(product)
 }
 
-watch(
-  () => props.cityId,
-  () => {
-    fetchHotProducts()
-  },
-  { immediate: true }
-)
+function handleClickOutside() {
+  showSortMenu.value = false
+}
+
+onMounted(() => {
+  document.addEventListener('click', handleClickOutside)
+})
+
+onBeforeUnmount(() => {
+  document.removeEventListener('click', handleClickOutside)
+})
 </script>
 
 <style scoped>
@@ -163,6 +189,12 @@ watch(
   gap: 12px;
 }
 
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
 .section-title {
   font-size: 24px;
   font-weight: 700;
@@ -175,6 +207,111 @@ watch(
   font-size: 14px;
   color: rgba(255, 255, 255, 0.7);
   font-weight: 400;
+}
+
+.sort-dropdown {
+  position: relative;
+}
+
+.sort-trigger {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.sort-trigger:hover {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+.sort-trigger:active {
+  transform: scale(0.97);
+}
+
+.sort-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.sort-label {
+  white-space: nowrap;
+}
+
+.chevron {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.chevron.rotated {
+  transform: rotate(180deg);
+}
+
+.sort-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 160px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15), 0 2px 8px rgba(0, 0, 0, 0.08);
+  list-style: none;
+  margin: 0;
+  padding: 6px;
+  z-index: 50;
+}
+
+.sort-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+  font-size: 14px;
+  color: #374151;
+  font-weight: 500;
+}
+
+.sort-option:hover {
+  background: #f5f3ff;
+  color: #667eea;
+}
+
+.sort-option.active {
+  background: #eef2ff;
+  color: #667eea;
+}
+
+.check-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.dropdown-enter-active,
+.dropdown-leave-active {
+  transition: all 0.2s ease;
+}
+
+.dropdown-enter-from,
+.dropdown-leave-to {
+  opacity: 0;
+  transform: translateY(-8px);
 }
 
 .header-badge {

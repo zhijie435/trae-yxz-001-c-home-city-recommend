@@ -1,59 +1,45 @@
 <template>
   <div class="app-container">
-    <AppHeader :currentPage="currentPage" @navigate="handleNavigate" />
-    <main class="main-content" :class="{ 'bg-white': currentPage !== 'home' }">
-          <Transition name="page-fade" mode="out-in">
-            <div v-if="currentPage === 'home'" key="home">
-              <div class="page-inner">
-                <section class="banner-section">
-                  <div class="section-header">
-                    <h2 class="section-title">{{ $t('banner.title') }}</h2>
-                    <div class="city-selector">
-                      <label>选择城市:</label>
-                      <select :value="selectedCityId" @change="handleCityChange($event.target.value || '')">
-                        <option value="">全国</option>
-                        <option v-for="city in cities" :key="city.id" :value="String(city.id)">
-                          {{ city.name }}
-                        </option>
-                      </select>
-                    </div>
-                  </div>
-                  <BannerCarousel :banners="banners" />
-                </section>
-
-                <HotRecommendations :city-id="selectedCityId" :cities="cities" />
-
-                <div class="hero-section">
-                  <h1>{{ $t('home.title') }}</h1>
-                  <p class="hero-desc">{{ $t('home.description') }}</p>
-                  <RentalTimeSelector
-                    :cities="cities"
-                    :selectedCityId="selectedCityId"
-                    @update:city="handleCityChange"
-                  />
+    <AppHeader :currentPage="store.page.current" @navigate="navigationService.navigateTo" />
+    <main class="main-content" :class="{ 'bg-white': store.page.current !== 'home' }">
+      <Transition name="page-fade" mode="out-in">
+        <div v-if="store.page.current === 'home'" key="home">
+          <div class="page-inner">
+            <section class="banner-section">
+              <div class="section-header">
+                <h2 class="section-title">{{ $t('banner.title') }}</h2>
+                <div class="city-selector">
+                  <label>选择城市:</label>
+                  <select :value="store.city.selectedId" @change="handleCityChange($event.target.value || '')">
+                    <option value="">全国</option>
+                    <option v-for="city in store.city.list" :key="city.id" :value="String(city.id)">
+                      {{ city.name }}
+                    </option>
+                  </select>
                 </div>
               </div>
+              <BannerCarousel :banners="store.banner.list" />
+            </section>
+
+            <HotRecommendations />
+
+            <div class="hero-section">
+              <h1>{{ $t('home.title') }}</h1>
+              <p class="hero-desc">{{ $t('home.description') }}</p>
+              <RentalTimeSelector />
             </div>
-          </Transition>
-
-          <Transition name="page-fade" mode="out-in">
-            <BannerAdmin v-else-if="currentPage === 'bannerAdmin'" key="bannerAdmin" />
-          </Transition>
-
-          <Transition name="page-fade" mode="out-in">
-            <BannerApply v-else-if="currentPage === 'bannerApply'" key="bannerApply" />
-          </Transition>
-
-          <Transition name="page-fade" mode="out-in">
-            <HotRecommendAdmin v-else-if="currentPage === 'hotAdmin'" key="hotAdmin" />
-          </Transition>
-
+          </div>
+        </div>
+        <BannerAdmin v-else-if="store.page.current === 'bannerAdmin'" key="bannerAdmin" />
+        <BannerApply v-else-if="store.page.current === 'bannerApply'" key="bannerApply" />
+        <HotRecommendAdmin v-else-if="store.page.current === 'hotAdmin'" key="hotAdmin" />
+      </Transition>
     </main>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { onMounted } from 'vue'
 import AppHeader from './components/AppHeader.vue'
 import BannerCarousel from './components/BannerCarousel.vue'
 import BannerAdmin from './components/BannerAdmin.vue'
@@ -61,52 +47,15 @@ import BannerApply from './components/BannerApply.vue'
 import RentalTimeSelector from './components/RentalTimeSelector.vue'
 import HotRecommendations from './components/HotRecommendations.vue'
 import HotRecommendAdmin from './components/HotRecommendAdmin.vue'
-
-const currentPage = ref('home')
-const banners = ref([])
-const cities = ref([])
-const selectedCityId = ref('')
-
-function handleNavigate(page) {
-  currentPage.value = page
-  window.scrollTo(0, 0)
-}
+import { store, actions } from './store'
+import { navigationService } from './services/navigation'
 
 function handleCityChange(cityId) {
-  selectedCityId.value = cityId ? String(cityId) : ''
-  fetchBanners()
-}
-
-async function fetchBanners() {
-  try {
-    const url = selectedCityId.value
-      ? `/api/banners?cityId=${selectedCityId.value}`
-      : '/api/banners'
-    const res = await fetch(url)
-    const data = await res.json()
-    if (data.success) {
-      banners.value = data.data
-    }
-  } catch (e) {
-    console.error(e)
-  }
-}
-
-async function fetchCities() {
-  try {
-    const res = await fetch('/api/cities')
-    const data = await res.json()
-    if (data.success) {
-      cities.value = data.data
-    }
-  } catch (e) {
-    console.error(e)
-  }
+  actions.setSelectedCity(cityId)
 }
 
 onMounted(() => {
-  fetchBanners()
-  fetchCities()
+  actions.initHomeData()
 })
 </script>
 

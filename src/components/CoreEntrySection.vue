@@ -29,6 +29,7 @@
 <script setup>
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { navigationService } from '../services/navigation'
 
 const { t } = useI18n()
 
@@ -75,7 +76,7 @@ const entries = computed(() => [
 ])
 
 function handleEntryClick(key) {
-  console.log('Entry clicked:', key)
+  navigationService.handleEntryClick(key)
 }
 </script>
 
