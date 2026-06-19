@@ -2,7 +2,7 @@
   <header class="app-header">
     <div class="header-inner">
       <div class="header-left">
-        <div class="logo-wrap">
+        <div class="logo-wrap" @click="$emit('navigate', 'home')">
           <svg class="logo-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect x="8" y="14" width="32" height="28" rx="6" fill="url(#logo-gradient)" />
             <circle cx="18" cy="28" r="3" fill="#fff" />
@@ -18,6 +18,29 @@
           </svg>
           <span class="slogan">{{ $t('header.slogan') }}</span>
         </div>
+        <nav class="nav-menu">
+          <button
+            class="nav-item"
+            :class="{ active: currentPage === 'home' }"
+            @click="$emit('navigate', 'home')"
+          >
+            {{ $t('nav.home') }}
+          </button>
+          <button
+            class="nav-item"
+            :class="{ active: currentPage === 'bannerAdmin' }"
+            @click="$emit('navigate', 'bannerAdmin')"
+          >
+            {{ $t('nav.bannerAdmin') }}
+          </button>
+          <button
+            class="nav-item"
+            :class="{ active: currentPage === 'bannerApply' }"
+            @click="$emit('navigate', 'bannerApply')"
+          >
+            {{ $t('nav.bannerApply') }}
+          </button>
+        </nav>
       </div>
 
       <div class="header-right">
@@ -60,8 +83,17 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount, defineProps, defineEmits } from 'vue'
 import { useI18n } from 'vue-i18n'
+
+defineProps({
+  currentPage: {
+    type: String,
+    default: 'home'
+  }
+})
+
+defineEmits(['navigate'])
 
 const { locale, t } = useI18n()
 const showLangMenu = ref(false)
@@ -123,12 +155,43 @@ onBeforeUnmount(() => {
 .header-left {
   display: flex;
   align-items: center;
+  gap: 40px;
 }
 
 .logo-wrap {
   display: flex;
   align-items: center;
   gap: 12px;
+  cursor: pointer;
+}
+
+.nav-menu {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.nav-item {
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #4b5563;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  background: transparent;
+}
+
+.nav-item:hover {
+  color: #667eea;
+  background: #f5f3ff;
+}
+
+.nav-item.active {
+  color: #667eea;
+  background: #eef2ff;
+  font-weight: 600;
 }
 
 .logo-icon {
@@ -267,6 +330,27 @@ onBeforeUnmount(() => {
 .dropdown-leave-to {
   opacity: 0;
   transform: translateY(-8px);
+}
+
+@media (max-width: 900px) {
+  .header-left {
+    gap: 20px;
+  }
+
+  .nav-menu {
+    gap: 0;
+  }
+
+  .nav-item {
+    padding: 6px 10px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 720px) {
+  .nav-menu {
+    display: none;
+  }
 }
 
 @media (max-width: 640px) {
