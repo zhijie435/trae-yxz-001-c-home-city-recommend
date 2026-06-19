@@ -1,4 +1,6 @@
-const BASE_URL = '/api'
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api'
+const APP_ENV = import.meta.env.VITE_APP_ENV || 'development'
+const ENABLE_MOCK = import.meta.env.VITE_ENABLE_MOCK === 'true'
 
 async function request(url, options = {}) {
   try {
