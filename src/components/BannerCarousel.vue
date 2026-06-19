@@ -117,10 +117,15 @@ function stopAutoPlay() {
   }
 }
 
-watch(() => props.banners, () => {
-  currentIndex.value = 0
-  startAutoPlay()
-})
+watch(
+  () => props.banners,
+  () => {
+    currentIndex.value = 0
+    stopAutoPlay()
+    startAutoPlay()
+  },
+  { deep: true, immediate: false }
+)
 
 onMounted(() => {
   startAutoPlay()

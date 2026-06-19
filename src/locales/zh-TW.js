@@ -111,5 +111,25 @@ export default {
     days: '天',
     reset: '重置',
     confirm: '確認'
+  },
+  coreEntry: {
+    title: '核心推薦',
+    subtitle: '精選服務入口',
+    scene: {
+      title: '場景選擇',
+      desc: '按使用場景精準匹配'
+    },
+    vendor: {
+      title: '廠商推薦',
+      desc: '優質品牌廠商入駐'
+    },
+    ai: {
+      title: 'AI科普',
+      desc: '智能知識輕鬆了解'
+    },
+    hot: {
+      title: '周邊熱銷',
+      desc: '熱門配件周邊推薦'
+    }
   }
 }

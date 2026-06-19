@@ -111,5 +111,25 @@ export default {
     days: ' days',
     reset: 'Reset',
     confirm: 'Confirm'
+  },
+  coreEntry: {
+    title: 'Core Entries',
+    subtitle: 'Featured service portals',
+    scene: {
+      title: 'Scene Select',
+      desc: 'Match by usage scenario'
+    },
+    vendor: {
+      title: 'Top Vendors',
+      desc: 'Quality brand manufacturers'
+    },
+    ai: {
+      title: 'AI Academy',
+      desc: 'Learn smart tech easily'
+    },
+    hot: {
+      title: 'Hot Deals',
+      desc: 'Trending accessories nearby'
+    }
   }
 }

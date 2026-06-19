@@ -24,12 +24,12 @@
               v-for="city in cities"
               :key="city.id"
               class="city-item"
-              :class="{ active: selectedCityId === city.id }"
+              :class="{ active: Number(selectedCityId) === city.id }"
               @click="selectCity(city)"
             >
               <span class="city-item-name">{{ city.name }}</span>
               <span class="city-item-en">{{ city.nameEn }}</span>
-              <svg v-if="selectedCityId === city.id" class="check-icon" viewBox="0 0 24 24" fill="none">
+              <svg v-if="Number(selectedCityId) === city.id" class="check-icon" viewBox="0 0 24 24" fill="none">
                 <path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </li>
@@ -101,13 +101,24 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
 
-const cities = ref([])
-const selectedCityId = ref(1)
+const props = defineProps({
+  cities: {
+    type: Array,
+    default: () => []
+  },
+  selectedCityId: {
+    type: [Number, String],
+    default: ''
+  }
+})
+
+const emit = defineEmits(['update:city'])
+
 const isDetecting = ref(true)
 const showCityDropdown = ref(false)
 const showDatePicker = ref(false)
@@ -120,8 +131,9 @@ const pickerMonth = ref(new Date().getMonth())
 const weekdays = ['日', '一', '二', '三', '四', '五', '六']
 
 const currentCityName = computed(() => {
-  const city = cities.value.find(c => c.id === selectedCityId.value)
-  return city ? city.name : '北京'
+  if (!props.selectedCityId) return '全国'
+  const city = props.cities.find(c => c.id === Number(props.selectedCityId) || c.id === props.selectedCityId)
+  return city ? city.name : '全国'
 })
 
 const dayCount = computed(() => {
@@ -248,54 +260,8 @@ function toggleCityDropdown() {
 }
 
 function selectCity(city) {
-  selectedCityId.value = city.id
+  emit('update:city', city.id)
   showCityDropdown.value = false
-}
-
-async function fetchCities() {
-  try {
-    const res = await fetch('/api/cities')
-    const data = await res.json()
-    if (data.success) {
-      cities.value = data.data
-    }
-  } catch (e) {
-    console.error(e)
-  }
-}
-
-async function detectCity() {
-  isDetecting.value = true
-  try {
-    const position = await new Promise((resolve, reject) => {
-      if (!navigator.geolocation) {
-        reject(new Error('Geolocation not supported'))
-        return
-      }
-      navigator.geolocation.getCurrentPosition(resolve, reject, {
-        timeout: 5000,
-        maximumAge: 300000
-      })
-    })
-    const { latitude, longitude } = position.coords
-    const res = await fetch(`/api/city/detect?lat=${latitude}&lng=${longitude}`)
-    const data = await res.json()
-    if (data.success && data.data) {
-      selectedCityId.value = data.data.id
-    }
-  } catch {
-    try {
-      const res = await fetch('/api/city/detect')
-      const data = await res.json()
-      if (data.success && data.data) {
-        selectedCityId.value = data.data.id
-      }
-    } catch {
-      selectedCityId.value = 1
-    }
-  } finally {
-    isDetecting.value = false
-  }
 }
 
 function handleClickOutside(e) {
@@ -307,9 +273,17 @@ function handleClickOutside(e) {
   }
 }
 
+watch(
+  () => props.cities,
+  (newCities) => {
+    if (newCities && newCities.length > 0) {
+      isDetecting.value = false
+    }
+  },
+  { immediate: true }
+)
+
 onMounted(() => {
-  fetchCities()
-  detectCity()
   document.addEventListener('click', handleClickOutside)
 })
 

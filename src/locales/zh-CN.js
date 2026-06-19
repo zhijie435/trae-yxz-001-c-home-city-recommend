@@ -111,5 +111,25 @@ export default {
     days: '天',
     reset: '重置',
     confirm: '确认'
+  },
+  coreEntry: {
+    title: '核心推荐',
+    subtitle: '精选服务入口',
+    scene: {
+      title: '场景选择',
+      desc: '按使用场景精准匹配'
+    },
+    vendor: {
+      title: '厂商推荐',
+      desc: '优质品牌厂商入驻'
+    },
+    ai: {
+      title: 'AI科普',
+      desc: '智能知识轻松了解'
+    },
+    hot: {
+      title: '周边热销',
+      desc: '热门配件周边推荐'
+    }
   }
 }

@@ -9,7 +9,7 @@
               <h2 class="section-title">{{ $t('banner.title') }}</h2>
               <div class="city-selector">
                 <label>选择城市:</label>
-                <select v-model="selectedCityId" @change="fetchBanners">
+                <select :value="selectedCityId" @change="handleCityChange($event.target.value || '')">
                   <option value="">全国</option>
                   <option v-for="city in cities" :key="city.id" :value="city.id">
                     {{ city.name }}
@@ -17,13 +17,17 @@
                 </select>
               </div>
             </div>
-            <BannerCarousel :banners="banners" />
+            <BannerCarousel :key="selectedCityId || 'all'" :banners="banners" />
           </section>
 
           <div class="hero-section">
             <h1>{{ $t('home.title') }}</h1>
             <p class="hero-desc">{{ $t('home.description') }}</p>
-            <RentalTimeSelector />
+            <RentalTimeSelector
+              :cities="cities"
+              :selectedCityId="selectedCityId"
+              @update:city="handleCityChange"
+            />
           </div>
         </div>
       </template>
@@ -55,6 +59,11 @@ const selectedCityId = ref('')
 function handleNavigate(page) {
   currentPage.value = page
   window.scrollTo(0, 0)
+}
+
+function handleCityChange(cityId) {
+  selectedCityId.value = cityId
+  fetchBanners()
 }
 
 async function fetchBanners() {
