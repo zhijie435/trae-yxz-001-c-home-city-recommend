@@ -6,7 +6,8 @@ export default {
   nav: {
     home: 'Home',
     bannerAdmin: 'Banner Admin',
-    bannerApply: 'Apply Banner'
+    bannerApply: 'Apply Banner',
+    productSort: 'Sort Products'
   },
   home: {
     title: 'Discover Your Ideal City',
@@ -130,6 +131,55 @@ export default {
     hot: {
       title: 'Hot Deals',
       desc: 'Trending accessories nearby'
+    }
+  },
+  hotRecommend: {
+    title: 'Hot Recommendations',
+    subtitleCity: ' Featured Products',
+    subtitleAll: 'Featured Products Nationwide',
+    empty: 'No hot recommended products',
+    sold: ' sold',
+    tagHot: 'Hot',
+    tagBest: 'Best',
+    tagNew: 'New',
+    tagRecommend: 'Pick'
+  },
+  productSort: {
+    title: 'Product Sort Management',
+    subtitle: 'Stores can customize the display order of hot recommended products',
+    filterCity: 'Select City',
+    filterStore: 'Select Store',
+    allCities: 'All Cities',
+    allStores: 'All Stores',
+    columns: {
+      sort: 'Rank',
+      image: 'Image',
+      name: 'Product Name',
+      city: 'City',
+      store: 'Store',
+      price: 'Price',
+      sales: 'Sales',
+      tag: 'Tag',
+      actions: 'Actions'
+    },
+    actions: {
+      moveUp: 'Move Up',
+      moveDown: 'Move Down',
+      moveTop: 'Top',
+      moveBottom: 'Bottom',
+      edit: 'Edit Sort'
+    },
+    tips: 'Tip: Lower number = higher rank. Adjust by dragging or entering a number.',
+    save: 'Save Sort',
+    saved: 'Sort order saved',
+    empty: 'No products found',
+    sortDialog: {
+      title: 'Adjust Sort Number',
+      currentSort: 'Current Rank',
+      newSort: 'New Sort Number',
+      placeholder: 'Enter sort number',
+      cancel: 'Cancel',
+      confirm: 'Confirm'
     }
   }
 }

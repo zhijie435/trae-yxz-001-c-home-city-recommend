@@ -6,7 +6,8 @@ export default {
   nav: {
     home: '首頁',
     bannerAdmin: 'Banner管理',
-    bannerApply: 'Banner申請'
+    bannerApply: 'Banner申請',
+    productSort: '商品排序'
   },
   home: {
     title: '發現您的理想城市',
@@ -131,5 +132,16 @@ export default {
       title: '周邊熱銷',
       desc: '熱門配件周邊推薦'
     }
+  },
+  hotRecommend: {
+    title: '熱門推薦',
+    subtitleCity: '門店商品精選',
+    subtitleAll: '全國門店精選商品',
+    empty: '暫無熱門推薦商品',
+    sold: '人已購買',
+    tagHot: '熱銷',
+    tagBest: '爆款',
+    tagNew: '新品',
+    tagRecommend: '推薦'
   }
 }

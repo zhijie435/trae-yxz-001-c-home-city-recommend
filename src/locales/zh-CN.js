@@ -6,7 +6,8 @@ export default {
   nav: {
     home: '首页',
     bannerAdmin: 'Banner管理',
-    bannerApply: 'Banner申请'
+    bannerApply: 'Banner申请',
+    productSort: '商品排序'
   },
   home: {
     title: '发现您的理想城市',
@@ -130,6 +131,55 @@ export default {
     hot: {
       title: '周边热销',
       desc: '热门配件周边推荐'
+    }
+  },
+  hotRecommend: {
+    title: '热门推荐',
+    subtitleCity: '门店商品精选',
+    subtitleAll: '全国门店精选商品',
+    empty: '暂无热门推荐商品',
+    sold: '人已购买',
+    tagHot: '热销',
+    tagBest: '爆款',
+    tagNew: '新品',
+    tagRecommend: '推荐'
+  },
+  productSort: {
+    title: '商品排序管理',
+    subtitle: '门店可自定义热门推荐商品的展示顺序',
+    filterCity: '选择城市',
+    filterStore: '选择门店',
+    allCities: '全部城市',
+    allStores: '全部门店',
+    columns: {
+      sort: '排序',
+      image: '商品图',
+      name: '商品名称',
+      city: '城市',
+      store: '门店',
+      price: '价格',
+      sales: '销量',
+      tag: '标签',
+      actions: '操作'
+    },
+    actions: {
+      moveUp: '上移',
+      moveDown: '下移',
+      moveTop: '置顶',
+      moveBottom: '置底',
+      edit: '编辑排序'
+    },
+    tips: '提示：数字越小排名越靠前，可通过拖拽或输入数字调整排序',
+    save: '保存排序',
+    saved: '排序已保存',
+    empty: '暂无商品数据',
+    sortDialog: {
+      title: '调整排序序号',
+      currentSort: '当前排序',
+      newSort: '新排序号',
+      placeholder: '请输入排序号',
+      cancel: '取消',
+      confirm: '确认'
     }
   }
 }

@@ -40,6 +40,13 @@
           >
             {{ $t('nav.bannerApply') }}
           </button>
+          <button
+            class="nav-item"
+            :class="{ active: currentPage === 'hotAdmin' }"
+            @click="$emit('navigate', 'hotAdmin')"
+          >
+            {{ $t('nav.hotAdmin') }}
+          </button>
         </nav>
       </div>
 

@@ -20,6 +20,8 @@
             <BannerCarousel :key="selectedCityId || 'all'" :banners="banners" />
           </section>
 
+          <HotRecommendations :key="'hot-' + (selectedCityId || 'all')" :city-id="selectedCityId" :cities="cities" />
+
           <div class="hero-section">
             <h1>{{ $t('home.title') }}</h1>
             <p class="hero-desc">{{ $t('home.description') }}</p>
@@ -39,6 +41,11 @@
       <template v-else-if="currentPage === 'bannerApply'">
         <BannerApply />
       </template>
+
+      <template v-else-if="currentPage === 'hotAdmin'">
+        <HotRecommendAdmin />
+      </template>
+
     </main>
   </div>
 </template>
@@ -50,6 +57,8 @@ import BannerCarousel from './components/BannerCarousel.vue'
 import BannerAdmin from './components/BannerAdmin.vue'
 import BannerApply from './components/BannerApply.vue'
 import RentalTimeSelector from './components/RentalTimeSelector.vue'
+import HotRecommendations from './components/HotRecommendations.vue'
+import HotRecommendAdmin from './components/HotRecommendAdmin.vue'
 
 const currentPage = ref('home')
 const banners = ref([])

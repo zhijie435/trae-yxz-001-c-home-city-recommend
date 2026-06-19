@@ -15,6 +15,32 @@ const cities = [
   { id: 5, name: '成都', nameEn: 'Chengdu', country: '中国', score: 88, lat: 30.5728, lng: 104.0668 }
 ]
 
+const stores = [
+  { id: 1, name: '北京朝阳旗舰店', nameEn: 'Beijing Chaoyang Flagship', cityId: 1, address: '北京市朝阳区建国路88号' },
+  { id: 2, name: '北京海淀体验店', nameEn: 'Beijing Haidian Experience', cityId: 1, address: '北京市海淀区中关村大街1号' },
+  { id: 3, name: '上海浦东旗舰店', nameEn: 'Shanghai Pudong Flagship', cityId: 2, address: '上海市浦东新区陆家嘴环路1000号' },
+  { id: 4, name: '上海静安体验店', nameEn: 'Shanghai Jing\'an Experience', cityId: 2, address: '上海市静安区南京西路1266号' },
+  { id: 5, name: '深圳南山旗舰店', nameEn: 'Shenzhen Nanshan Flagship', cityId: 3, address: '深圳市南山区科技园南路1号' },
+  { id: 6, name: '杭州西湖体验店', nameEn: 'Hangzhou West Lake Experience', cityId: 4, address: '杭州市西湖区文三路100号' },
+  { id: 7, name: '成都春熙路旗舰店', nameEn: 'Chengdu Chunxi Road Flagship', cityId: 5, address: '成都市锦江区春熙路8号' }
+]
+
+let hotProductIdCounter = 13
+const hotProducts = [
+  { id: 1, name: '智能清洁机器人Pro', nameEn: 'Smart Cleaning Robot Pro', price: 2999, originalPrice: 3999, imageUrl: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=smart%20cleaning%20robot%20white%20modern%20design%20product%20photo%20on%20white%20background&image_size=square_hd', storeId: 1, cityId: 1, sort: 2, sales: 1280, tag: '热销' },
+  { id: 2, name: '家用服务机器人S1', nameEn: 'Home Service Robot S1', price: 4999, originalPrice: 5999, imageUrl: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=home%20service%20robot%20friendly%20design%20white%20modern%20product%20photo&image_size=square_hd', storeId: 1, cityId: 1, sort: 1, sales: 2150, tag: '爆款' },
+  { id: 3, name: 'AI教育陪伴机器人', nameEn: 'AI Education Companion Robot', price: 1899, originalPrice: 2499, imageUrl: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=cute%20AI%20education%20robot%20for%20kids%20colorful%20friendly%20product%20photo&image_size=square_hd', storeId: 2, cityId: 1, sort: 3, sales: 890, tag: '新品' },
+  { id: 4, name: '商用配送机器人', nameEn: 'Commercial Delivery Robot', price: 19999, originalPrice: 24999, imageUrl: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=commercial%20delivery%20robot%20restaurant%20hotel%20professional%20white%20product&image_size=square_hd', storeId: 3, cityId: 2, sort: 1, sales: 350, tag: '热销' },
+  { id: 5, name: '智能迎宾机器人', nameEn: 'Smart Welcome Robot', price: 15999, originalPrice: 18999, imageUrl: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=smart%20welcome%20greeting%20robot%20humanoid%20white%20modern%20lobby&image_size=square_hd', storeId: 3, cityId: 2, sort: 2, sales: 520, tag: '推荐' },
+  { id: 6, name: '家庭安防机器人', nameEn: 'Home Security Robot', price: 3599, originalPrice: 4299, imageUrl: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=home%20security%20patrol%20robot%20camera%20smart%20modern%20design%20product&image_size=square_hd', storeId: 4, cityId: 2, sort: 3, sales: 680, tag: '新品' },
+  { id: 7, name: '儿童编程机器人套件', nameEn: 'Kids Coding Robot Kit', price: 1299, originalPrice: 1699, imageUrl: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=colorful%20kids%20coding%20robot%20kit%20educational%20toy%20STEM%20product%20photo&image_size=square_hd', storeId: 5, cityId: 3, sort: 1, sales: 1560, tag: '爆款' },
+  { id: 8, name: '智能老人陪护机器人', nameEn: 'Elderly Care Robot', price: 6999, originalPrice: 8999, imageUrl: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=elderly%20care%20companion%20robot%20friendly%20warm%20design%20product%20photo&image_size=square_hd', storeId: 5, cityId: 3, sort: 2, sales: 420, tag: '推荐' },
+  { id: 9, name: '桌面级机械臂', nameEn: 'Desktop Robotic Arm', price: 8999, originalPrice: 10999, imageUrl: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=desktop%20robotic%20arm%20industrial%20design%20black%20precise%20product%20photo&image_size=square_hd', storeId: 6, cityId: 4, sort: 2, sales: 280, tag: '新品' },
+  { id: 10, name: '宠物陪伴机器人', nameEn: 'Pet Companion Robot', price: 1599, originalPrice: 1999, imageUrl: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=cute%20pet%20companion%20robot%20interactive%20toy%20white%20round%20product%20photo&image_size=square_hd', storeId: 6, cityId: 4, sort: 1, sales: 980, tag: '热销' },
+  { id: 11, name: '餐厅送餐机器人', nameEn: 'Restaurant Food Delivery Robot', price: 25999, originalPrice: 29999, imageUrl: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=restaurant%20food%20delivery%20robot%20trays%20professional%20white%20product%20photo&image_size=square_hd', storeId: 7, cityId: 5, sort: 1, sales: 180, tag: '爆款' },
+  { id: 12, name: '户外巡检机器人', nameEn: 'Outdoor Patrol Robot', price: 49999, originalPrice: 59999, imageUrl: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=outdoor%20security%20patrol%20robot%20industrial%20rugged%20design%20product&image_size=square_hd', storeId: 7, cityId: 5, sort: 2, sales: 95, tag: '推荐' }
+]
+
 let banners = [
   {
     id: 1,
@@ -235,6 +261,189 @@ app.put('/api/banners/:id/reject', (req, res) => {
   banner.status = 'rejected'
   banner.updatedAt = new Date().toISOString()
   res.json({ success: true, data: banner })
+})
+
+app.get('/api/hot-products', (req, res) => {
+  const { cityId, limit } = req.query
+  let result = [...hotProducts]
+
+  if (cityId) {
+    const cid = parseInt(cityId)
+    result = result.filter(p => p.cityId === cid)
+  }
+
+  result.sort((a, b) => {
+    if (a.sort !== b.sort) {
+      return a.sort - b.sort
+    }
+    return b.sales - a.sales
+  })
+
+  if (limit) {
+    result = result.slice(0, parseInt(limit))
+  }
+
+  const data = result.map(p => {
+    const store = stores.find(s => s.id === p.storeId)
+    return {
+      ...p,
+      storeName: store ? store.name : '',
+      storeNameEn: store ? store.nameEn : ''
+    }
+  })
+
+  res.json({ success: true, data })
+})
+
+app.get('/api/hot-products/admin', (req, res) => {
+  const { cityId, storeId } = req.query
+  let result = [...hotProducts]
+
+  if (cityId) {
+    const cid = parseInt(cityId)
+    result = result.filter(p => p.cityId === cid)
+  }
+
+  if (storeId) {
+    const sid = parseInt(storeId)
+    result = result.filter(p => p.storeId === sid)
+  }
+
+  result.sort((a, b) => {
+    if (a.sort !== b.sort) {
+      return a.sort - b.sort
+    }
+    return b.sales - a.sales
+  })
+
+  const data = result.map(p => {
+    const store = stores.find(s => s.id === p.storeId)
+    const city = cities.find(c => c.id === p.cityId)
+    return {
+      ...p,
+      storeName: store ? store.name : '',
+      storeNameEn: store ? store.nameEn : '',
+      cityName: city ? city.name : '',
+      cityNameEn: city ? city.nameEn : ''
+    }
+  })
+
+  res.json({ success: true, data })
+})
+
+app.post('/api/hot-products', (req, res) => {
+  const { name, nameEn, price, originalPrice, imageUrl, storeId, cityId, sort, tag, sales } = req.body
+
+  if (!name || !price || !imageUrl || !storeId || !cityId) {
+    return res.status(400).json({ success: false, message: '商品名称、价格、图片、门店和城市不能为空' })
+  }
+
+  const store = stores.find(s => s.id === parseInt(storeId))
+  if (!store) {
+    return res.status(400).json({ success: false, message: '门店不存在' })
+  }
+
+  const newProduct = {
+    id: hotProductIdCounter++,
+    name,
+    nameEn: nameEn || '',
+    price: parseFloat(price),
+    originalPrice: originalPrice ? parseFloat(originalPrice) : null,
+    imageUrl,
+    storeId: parseInt(storeId),
+    cityId: parseInt(cityId),
+    sort: sort !== undefined ? parseInt(sort) : 100,
+    sales: sales ? parseInt(sales) : 0,
+    tag: tag || '',
+    createdAt: new Date().toISOString()
+  }
+
+  hotProducts.push(newProduct)
+
+  const data = {
+    ...newProduct,
+    storeName: store.name,
+    storeNameEn: store.nameEn,
+    cityName: cities.find(c => c.id === newProduct.cityId)?.name || '',
+    cityNameEn: cities.find(c => c.id === newProduct.cityId)?.nameEn || ''
+  }
+
+  res.json({ success: true, data })
+})
+
+app.put('/api/hot-products/:id', (req, res) => {
+  const id = parseInt(req.params.id)
+  const { name, nameEn, price, originalPrice, imageUrl, storeId, cityId, sort, tag } = req.body
+
+  const product = hotProducts.find(p => p.id === id)
+  if (!product) {
+    return res.status(404).json({ success: false, message: '商品不存在' })
+  }
+
+  if (name !== undefined) product.name = name
+  if (nameEn !== undefined) product.nameEn = nameEn
+  if (price !== undefined) product.price = parseFloat(price)
+  if (originalPrice !== undefined) product.originalPrice = originalPrice ? parseFloat(originalPrice) : null
+  if (imageUrl !== undefined) product.imageUrl = imageUrl
+  if (storeId !== undefined) product.storeId = parseInt(storeId)
+  if (cityId !== undefined) product.cityId = parseInt(cityId)
+  if (sort !== undefined) product.sort = parseInt(sort)
+  if (tag !== undefined) product.tag = tag
+
+  const store = stores.find(s => s.id === product.storeId)
+  const city = cities.find(c => c.id === product.cityId)
+  const data = {
+    ...product,
+    storeName: store ? store.name : '',
+    storeNameEn: store ? store.nameEn : '',
+    cityName: city ? city.name : '',
+    cityNameEn: city ? city.nameEn : ''
+  }
+
+  res.json({ success: true, data })
+})
+
+app.delete('/api/hot-products/:id', (req, res) => {
+  const id = parseInt(req.params.id)
+  const index = hotProducts.findIndex(p => p.id === id)
+
+  if (index === -1) {
+    return res.status(404).json({ success: false, message: '商品不存在' })
+  }
+
+  const deleted = hotProducts.splice(index, 1)[0]
+  res.json({ success: true, data: deleted })
+})
+
+app.put('/api/hot-products/sort/batch', (req, res) => {
+  const { items } = req.body
+
+  if (!items || !Array.isArray(items)) {
+    return res.status(400).json({ success: false, message: '参数格式错误' })
+  }
+
+  const updated = []
+  for (const item of items) {
+    const product = hotProducts.find(p => p.id === item.id)
+    if (product) {
+      product.sort = parseInt(item.sort)
+      updated.push(product)
+    }
+  }
+
+  res.json({ success: true, data: updated, count: updated.length })
+})
+
+app.get('/api/stores', (req, res) => {
+  const { cityId } = req.query
+  let result = [...stores]
+
+  if (cityId) {
+    const cid = parseInt(cityId)
+    result = result.filter(s => s.cityId === cid)
+  }
+
+  res.json({ success: true, data: result })
 })
 
 app.get('/api/health', (req, res) => {
