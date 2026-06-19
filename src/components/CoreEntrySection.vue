@@ -151,6 +151,16 @@ function handleEntryClick(key) {
   opacity: 1;
 }
 
+.entry-card:active {
+  transform: translateY(-2px) scale(0.985);
+  transition-duration: 0.1s;
+}
+
+.entry-card:active .entry-icon-wrap {
+  transform: scale(1.05) rotate(1deg);
+  transition-duration: 0.1s;
+}
+
 .entry-icon-wrap {
   width: 64px;
   height: 64px;

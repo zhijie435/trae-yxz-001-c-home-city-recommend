@@ -24,12 +24,12 @@
               v-for="city in cities"
               :key="city.id"
               class="city-item"
-              :class="{ active: Number(selectedCityId) === city.id }"
+              :class="{ active: String(selectedCityId) === String(city.id) }"
               @click="selectCity(city)"
             >
               <span class="city-item-name">{{ city.name }}</span>
               <span class="city-item-en">{{ city.nameEn }}</span>
-              <svg v-if="Number(selectedCityId) === city.id" class="check-icon" viewBox="0 0 24 24" fill="none">
+              <svg v-if="String(selectedCityId) === String(city.id)" class="check-icon" viewBox="0 0 24 24" fill="none">
                 <path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </li>
@@ -326,6 +326,11 @@ onBeforeUnmount(() => {
   border-color: rgba(255, 255, 255, 0.4);
 }
 
+.city-picker:active {
+  transform: scale(0.97);
+  transition-duration: 0.1s;
+}
+
 .city-picker.detecting {
   pointer-events: none;
   opacity: 0.7;
@@ -452,6 +457,11 @@ onBeforeUnmount(() => {
 .time-field:hover {
   background: rgba(255, 255, 255, 0.28);
   border-color: rgba(255, 255, 255, 0.4);
+}
+
+.time-field:active {
+  transform: scale(0.97);
+  transition-duration: 0.1s;
 }
 
 .time-icon {

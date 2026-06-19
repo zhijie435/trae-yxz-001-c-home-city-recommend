@@ -2,49 +2,51 @@
   <div class="app-container">
     <AppHeader :currentPage="currentPage" @navigate="handleNavigate" />
     <main class="main-content" :class="{ 'bg-white': currentPage !== 'home' }">
-      <template v-if="currentPage === 'home'">
-        <div class="page-inner">
-          <section class="banner-section">
-            <div class="section-header">
-              <h2 class="section-title">{{ $t('banner.title') }}</h2>
-              <div class="city-selector">
-                <label>选择城市:</label>
-                <select :value="selectedCityId" @change="handleCityChange($event.target.value || '')">
-                  <option value="">全国</option>
-                  <option v-for="city in cities" :key="city.id" :value="String(city.id)">
-                    {{ city.name }}
-                  </option>
-                </select>
+          <Transition name="page-fade" mode="out-in">
+            <div v-if="currentPage === 'home'" key="home">
+              <div class="page-inner">
+                <section class="banner-section">
+                  <div class="section-header">
+                    <h2 class="section-title">{{ $t('banner.title') }}</h2>
+                    <div class="city-selector">
+                      <label>选择城市:</label>
+                      <select :value="selectedCityId" @change="handleCityChange($event.target.value || '')">
+                        <option value="">全国</option>
+                        <option v-for="city in cities" :key="city.id" :value="String(city.id)">
+                          {{ city.name }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                  <BannerCarousel :banners="banners" />
+                </section>
+
+                <HotRecommendations :city-id="selectedCityId" :cities="cities" />
+
+                <div class="hero-section">
+                  <h1>{{ $t('home.title') }}</h1>
+                  <p class="hero-desc">{{ $t('home.description') }}</p>
+                  <RentalTimeSelector
+                    :cities="cities"
+                    :selectedCityId="selectedCityId"
+                    @update:city="handleCityChange"
+                  />
+                </div>
               </div>
             </div>
-            <BannerCarousel :banners="banners" />
-          </section>
+          </Transition>
 
-          <HotRecommendations :city-id="selectedCityId" :cities="cities" />
+          <Transition name="page-fade" mode="out-in">
+            <BannerAdmin v-else-if="currentPage === 'bannerAdmin'" key="bannerAdmin" />
+          </Transition>
 
-          <div class="hero-section">
-            <h1>{{ $t('home.title') }}</h1>
-            <p class="hero-desc">{{ $t('home.description') }}</p>
-            <RentalTimeSelector
-              :cities="cities"
-              :selectedCityId="selectedCityId"
-              @update:city="handleCityChange"
-            />
-          </div>
-        </div>
-      </template>
+          <Transition name="page-fade" mode="out-in">
+            <BannerApply v-else-if="currentPage === 'bannerApply'" key="bannerApply" />
+          </Transition>
 
-      <template v-else-if="currentPage === 'bannerAdmin'">
-        <BannerAdmin />
-      </template>
-
-      <template v-else-if="currentPage === 'bannerApply'">
-        <BannerApply />
-      </template>
-
-      <template v-else-if="currentPage === 'hotAdmin'">
-        <HotRecommendAdmin />
-      </template>
+          <Transition name="page-fade" mode="out-in">
+            <HotRecommendAdmin v-else-if="currentPage === 'hotAdmin'" key="hotAdmin" />
+          </Transition>
 
     </main>
   </div>
@@ -118,6 +120,21 @@ onMounted(() => {
 
 .main-content {
   flex: 1;
+}
+
+.page-fade-enter-active,
+.page-fade-leave-active {
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.page-fade-enter-from {
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+.page-fade-leave-to {
+  opacity: 0;
+  transform: translateY(-8px);
 }
 
 .main-content.bg-white {
